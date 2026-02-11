@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import Settings from './components/Settings';
 import Guide from './components/Guide';
+import BusinessPlanReview from './components/BusinessPlanReview';
 import { INITIAL_SETTINGS } from './constants';
 import { UserSettings } from './types';
 import { fetchSettings } from './services/api';
@@ -50,6 +51,7 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (currentView) {
       case 'dashboard': return <Dashboard settings={settings} />;
+      case 'plan-review': return <BusinessPlanReview />;
       case 'settings': return <Settings settings={settings} onUpdate={handleSettingsUpdate} />;
       case 'guide': return <Guide />;
       default: return <Dashboard settings={settings} />;
