@@ -1,4 +1,4 @@
-import { Bid, UserSettings, PlanReviewRequest, PlanReviewResponse } from '../types';
+import { Bid, UserSettings } from '../types';
 
 // Vercel 배포 시 자동으로 같은 도메인 사용, 로컬에서는 프록시 사용
 const getApiBaseUrl = () => {
@@ -163,22 +163,7 @@ export async function saveSettings(settings: UserSettings): Promise<void> {
   }
 }
 
-/**
- * 사업계획서 전문가 검토 요청
- */
-export async function submitPlanReview(request: PlanReviewRequest): Promise<PlanReviewResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/plan-review`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(request),
-    signal: AbortSignal.timeout(120000), // 120초 타임아웃 (6명 병렬 AI 호출)
-  });
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error || `검토 요청 실패 (HTTP ${response.status})`);
-  }
-  return response.json();
-}
+
 
 /**
  * 수동 스크래핑 실행
