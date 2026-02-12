@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Settings, BookOpen, ShieldCheck, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, Settings, BookOpen, ShieldCheck } from 'lucide-react';
 
 interface SidebarProps {
   currentView: string;
@@ -9,7 +9,6 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ currentView, onChangeView }) => {
   const menuItems = [
     { id: 'dashboard', label: '대시보드', icon: LayoutDashboard },
-    { id: 'plan-review', label: '사업계획서 검토', icon: ClipboardList },
     { id: 'settings', label: '설정 (봇 구성)', icon: Settings },
     { id: 'guide', label: '나라장터 설정 가이드', icon: BookOpen },
   ];

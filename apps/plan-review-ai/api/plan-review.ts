@@ -123,7 +123,6 @@ async function reviewWithClaude(
 
   const responseText = message.content[0].type === 'text' ? message.content[0].text : '';
 
-  // JSON 파싱 (마크다운 코드블록 제거 포함)
   const jsonMatch = responseText.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
     throw new Error(`${reviewer.name} 검토 결과 파싱 실패`);
@@ -172,12 +171,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const client = new Anthropic({ apiKey });
 
   try {
-    // 6명의 검토자가 병렬로 사업계획서를 분석
     const reviewResults = await Promise.all(
       REVIEWERS.map((reviewer) => reviewWithClaude(client, reviewer, content.trim())),
     );
 
-    // 종합 요약 생성
     const avgScore = reviewResults.reduce((sum, r) => sum + r.score, 0) / reviewResults.length;
     const allStrengths = reviewResults.flatMap((r) => r.strengths).slice(0, 5);
     const allImprovements = reviewResults.flatMap((r) => r.improvements).slice(0, 5);
