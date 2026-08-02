@@ -124,6 +124,31 @@ macOS·Linux는 `./run.sh` 를 쓰십시오.
 
 ---
 
+## 5-1. 디자인 시스템
+
+화면은 **IDB 디자인 시스템**(`design.md` · `design_system_token.md`)을 적용했습니다.
+
+| 항목 | 적용 |
+|---|---|
+| 폰트 | Pretendard Variable — `static/vendor/`에 임베드(오프라인 동작) |
+| 컬러 | semantic 토큰 경유. raw hex 를 컴포넌트에 직접 쓰지 않음 |
+| 상태색 | positive `#00CC89` / warning `#FFAA00` / danger `#FF334B` / primary `#4A71FF` |
+| 차트색 | categorical 토큰(`color-category-*`) — 상태 표시에는 쓰지 않음 |
+| 간격 | 8배수 (4·8·12·16·24·32·48), web margin 24px |
+| radius | 2·4·6·8·12·16 |
+| 그림자 | elevation level 1~3 (임의 그림자 없음) |
+| 굵기 | 300 / 400 / 600 (700·800 미사용) |
+
+AI와 규칙의 색 구분은 **AI = primary blue / 규칙 = neutral gray** 로 두어,
+"AI가 하는 일은 [2] 학습과 [8] 재학습뿐"이라는 제안서 11p 메시지를 색으로도 전달합니다.
+
+> **참고 — 디자인 문서 불일치 1건**
+> `design.md` §3 상태 컬러 표는 Positive 를 `light #91E9CC` / `extra-light #E6FAF3` 로,
+> `design_system_token.md` 는 `positive-extra-light #91E9CC` / `positive-light #E6FAF3` 로
+> 서로 반대로 정의합니다. 나머지 3색(informative·danger·warning)은 일치하므로
+> Positive 만 어긋난 것으로 보입니다. 이 데모는 다른 3색과 같은 규칙
+> (extra-light = 가장 옅음)을 따랐습니다.
+
 ## 6. 폴더 구조
 
 ```
@@ -142,7 +167,7 @@ hd-cooling-demo/
 ├── static/
 │   ├── index.html              화면 5개 탭 (단일 파일)
 │   ├── data.js                 미리 계산된 결과
-│   └── vendor/chart.umd.js     차트 라이브러리 (오프라인)
+│   └── vendor/                 Chart.js · Pretendard (오프라인)
 ├── data/ models/ reports/      생성물 (git에 올리지 않음)
 ```
 

@@ -7,45 +7,85 @@
 <script src="vendor/chart.umd.js"></script>
 <script src="data.js"></script>
 <style>
+/* ─────────────────────────────────────────────
+   IDB Design System — semantic token 적용
+   design.md §3 · design_system_token.md 기준
+   raw hex 를 컴포넌트에 직접 쓰지 않고 이 층을 경유합니다.
+   ───────────────────────────────────────────── */
 :root{
-  --bg:#f4f6f9; --panel:#fff; --line:#e2e7ee; --line2:#eef1f6;
-  --ink:#1a2230; --ink2:#5b6879; --ink3:#93a0b1;
-  --accent:#12467f; --accent2:#2f7fd1;
-  --ai:#6b3fd4; --ai-bg:#f2edfd;
-  --rule:#3c7a5a; --rule-bg:#ecf6f1;
-  --ok:#1e7a4d; --ok-bg:#e8f6ee;
-  --warn:#a86a12; --warn-bg:#fdf3e2;
-  --bad:#b3372f; --bad-bg:#fdedeb;
-  --shadow:0 1px 2px rgba(20,35,60,.05),0 4px 14px rgba(20,35,60,.05);
+  --bg:#F7F7F8;                    /* semantic-bg-light */
+  --panel:#FFFFFF;                 /* semantic-bg-default */
+  --header:#171719;                /* semantic-natural-deep */
+
+  --ink:#171719;                   /* semantic-text-default */
+  --ink2:#46474C;                  /* semantic-text-alternative */
+  --ink3:#70737C;                  /* semantic-text-sub */
+  --ink-strong:#000000;            /* semantic-text-strong */
+  --on-dark:#FFFFFF;               /* semantic-text-on-dark */
+
+  --line:rgba(112,115,124,.24);    /* semantic-line-default */
+  --line2:#F4F4F5;                 /* semantic-line-alternative */
+  --line3:#EAEBEC;                 /* semantic-line-neutral */
+
+  --accent:#4A71FF;                /* semantic-primary-default */
+  --accent-line:#8DA6FF;           /* semantic-primary-line-default */
+  --accent-bg:#EDF1FF;             /* semantic-primary-light */
+  --accent-bg2:#F7F9FF;            /* semantic-primary-extra-light */
+
+  --ok:#00CC89;   --ok-bg:#E6FAF3;   --ok-line:#91E9CC;    /* positive */
+  --info:#3366FF; --info-bg:#EBF0FF;                        /* informative */
+  --bad:#FF334B;  --bad-bg:#FFEBED;  --bad-line:#FFA7B2;    /* danger */
+  --warn:#FFAA00; --warn-bg:#FFF7E6; --warn-line:#FFDA91;   /* warning */
+
+  --n-light:#F4F4F5;               /* semantic-natural-light */
+  --n-default:#EAEBEC;             /* semantic-natural-default */
+  --n-strong:#C2C4C8;              /* semantic-natural-strong */
+
+  /* categorical — 차트 데이터 구분 전용 (상태 표시 금지) */
+  --cat-sensor:#00A9A9; --cat-blue:#008DCF; --cat-edge:#0099FF;
+  --cat-green:#00D68F;  --cat-orange:#FF8C40; --cat-purple:#A14FF9;
+
+  /* elevation level 1~3 — 임의 그림자 금지 */
+  --shadow:0 0 2px rgba(23,23,25,.05), 0 1px 2px rgba(23,23,25,.05);
+  --shadow2:0 0 2px rgba(23,23,25,.05), 0 4px 8px rgba(23,23,25,.08);
+  --shadow3:0 0 2px rgba(23,23,25,.08), 0 8px 16px rgba(23,23,25,.12);
+
+  --hover:rgba(23,23,25,.05);
+  --pressed:rgba(23,23,25,.12);
+}
+@font-face{
+  font-family:"Pretendard Variable";
+  src:url("vendor/PretendardVariable.woff2") format("woff2-variations");
+  font-weight:300 700; font-display:swap; font-style:normal;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
-  font-family:"Malgun Gothic","맑은 고딕",-apple-system,"Segoe UI",system-ui,sans-serif;
-  font-size:13px;line-height:1.55;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.01em}
+  font-family:"Pretendard Variable",Pretendard,-apple-system,system-ui,sans-serif;
+  font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.01em}
 table{border-collapse:collapse;width:100%}
 
 /* ── 헤더 */
-header{background:linear-gradient(180deg,#12467f,#0e3765);color:#fff;padding:14px 22px 0}
+header{background:var(--header);color:var(--on-dark);padding:16px 24px 0}
 .hd-top{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
-.hd-top h1{font-size:16.5px}
-.hd-top .sub{color:#b9d2ec;font-size:12px}
-.hd-top .vendor{margin-left:auto;color:#9fc0e2;font-size:11.5px;letter-spacing:.04em}
-.hd-meta{display:flex;gap:16px;flex-wrap:wrap;color:#c8dcf0;font-size:11.5px;margin-top:5px}
-.hd-meta b{color:#fff;font-weight:600}
+.hd-top h1{font-size:16px}
+.hd-top .sub{color:rgba(255,255,255,.72);font-size:12px}
+.hd-top .vendor{margin-left:auto;color:rgba(255,255,255,.56);font-size:12px;letter-spacing:.04em}
+.hd-meta{display:flex;gap:16px;flex-wrap:wrap;color:rgba(255,255,255,.72);font-size:12px;margin-top:5px}
+.hd-meta b{color:var(--on-dark);font-weight:600}
 nav{display:flex;gap:2px;margin-top:12px;overflow-x:auto}
-nav button{background:transparent;border:0;border-radius:7px 7px 0 0;color:#a9c6e4;
-  padding:9px 15px;font-size:12.5px;font-family:inherit;cursor:pointer;white-space:nowrap;
+nav button{background:transparent;border:0;border-radius:6px 6px 0 0;color:rgba(255,255,255,.64);
+  padding:8px 16px;font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;
   border-bottom:2px solid transparent}
-nav button:hover{color:#fff;background:rgba(255,255,255,.07)}
-nav button.on{background:var(--bg);color:var(--accent);font-weight:700;border-bottom-color:var(--bg)}
+nav button:hover{color:var(--on-dark);background:rgba(255,255,255,.08)}
+nav button.on{background:var(--bg);color:var(--accent);font-weight:600;border-bottom-color:var(--bg)}
 nav button .n{opacity:.6;margin-right:5px;font-size:11px}
 
 /* ── 레이아웃 */
-main{padding:16px 22px 60px;max-width:1560px;margin:0 auto}
-.note{background:#fffdf5;border:1px solid #f0e3c0;color:#7a6427;border-radius:7px;
-  padding:7px 12px;font-size:11.5px;margin-bottom:14px}
-.grid{display:grid;gap:13px}
+main{padding:24px 24px 64px;max-width:1560px;margin:0 auto}
+.note{background:var(--warn-bg);border:1px solid var(--warn-line);color:#B57900;border-radius:6px;
+  padding:8px 12px;font-size:12px;margin-bottom:14px}
+.grid{display:grid;gap:16px}
 .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -53,119 +93,119 @@ main{padding:16px 22px 60px;max-width:1560px;margin:0 auto}
   .g2{grid-template-columns:1fr}}
 @media(max-width:720px){.g2,.g3,.g4{grid-template-columns:1fr}}
 
-.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
-  padding:13px 15px;box-shadow:var(--shadow);min-width:0}
-.card>h3{font-size:12.5px;color:var(--ink);margin-bottom:2px;display:flex;
-  align-items:center;gap:7px;flex-wrap:wrap}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px;box-shadow:var(--shadow);min-width:0}
+.card>h3{font-size:13px;color:var(--ink);margin-bottom:2px;display:flex;
+  align-items:center;gap:8px;flex-wrap:wrap}
 .card>.cap{font-size:11px;color:var(--ink3);margin-bottom:10px}
 .chart{position:relative;height:230px}
 .chart.tall{height:290px}
 .chart.short{height:180px}
 
 /* ── KPI */
-.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;
-  padding:12px 14px;box-shadow:var(--shadow)}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:16px;box-shadow:var(--shadow)}
 .kpi .k{font-size:11px;color:var(--ink2);margin-bottom:5px}
-.kpi .v{font-size:25px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
-.kpi .v small{font-size:12.5px;font-weight:600;color:var(--ink2);margin-left:3px}
+.kpi .v{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.kpi .v small{font-size:13px;font-weight:600;color:var(--ink2);margin-left:3px}
 .kpi .d{font-size:11px;color:var(--ink3);margin-top:4px}
-.kpi.hl{background:linear-gradient(180deg,#f7fbff,#fff);border-color:#c8ddf2}
+.kpi.hl{background:var(--accent-bg2);border-color:var(--accent-line)}
 
 /* ── 배지 */
-.b{display:inline-flex;align-items:center;gap:4px;border-radius:5px;padding:1.5px 7px;
-  font-size:10.5px;font-weight:700;white-space:nowrap;border:1px solid transparent}
-.b.ai{background:var(--ai-bg);color:var(--ai);border-color:#dcd0f7}
-.b.rule{background:var(--rule-bg);color:var(--rule);border-color:#cbe5d8}
-.b.ok{background:var(--ok-bg);color:var(--ok);border-color:#c5e6d3}
-.b.warn{background:var(--warn-bg);color:var(--warn);border-color:#f0dcb4}
-.b.bad{background:var(--bad-bg);color:var(--bad);border-color:#f3ccc7}
-.b.mute{background:#f0f3f7;color:var(--ink2);border-color:var(--line)}
+.b{display:inline-flex;align-items:center;gap:4px;border-radius:4px;padding:2px 8px;
+  font-size:11px;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.b.ai{background:var(--accent-bg);color:var(--accent);border-color:var(--accent-line)}
+.b.rule{background:var(--n-light);color:var(--ink2);border-color:var(--line3)}
+.b.ok{background:var(--ok-bg);color:#00744E;border-color:var(--ok-line)}
+.b.warn{background:var(--warn-bg);color:#B57900;border-color:var(--warn-line)}
+.b.bad{background:var(--bad-bg);color:#B52435;border-color:var(--bad-line)}
+.b.mute{background:var(--n-light);color:var(--ink2);border-color:var(--line3)}
 
 /* ── 표 */
-table.t{font-size:11.5px}
-table.t th{background:#f7f9fc;color:var(--ink2);font-weight:600;text-align:left;
-  padding:7px 9px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:11px}
-table.t td{padding:6.5px 9px;border-bottom:1px solid var(--line2);vertical-align:top}
+table.t{font-size:12px}
+table.t th{background:var(--bg);color:var(--ink2);font-weight:600;text-align:left;
+  padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:11px}
+table.t td{padding:8px 12px;border-bottom:1px solid var(--line2);vertical-align:top}
 table.t tr:last-child td{border-bottom:0}
 table.t td.num,table.t th.num{text-align:right;font-variant-numeric:tabular-nums}
-table.t tr.dim td{color:var(--ink3);background:#fcfdfe}
+table.t tr.dim td{color:var(--ink3);background:var(--bg)}
 .scroll{overflow-x:auto}
 .tall-scroll{max-height:330px;overflow-y:auto}
 
 /* ── 파이프라인 */
 .pipe{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
 .pipe .st{flex:1 1 118px;background:var(--panel);border:1px solid var(--line);
-  border-radius:8px;padding:8px 10px;box-shadow:var(--shadow)}
-.pipe .st.ai{border-color:#d5c6f5;background:linear-gradient(180deg,#faf7ff,#fff)}
-.pipe .st .n{font-size:10px;color:var(--ink3);font-weight:700}
-.pipe .st .nm{font-size:11.5px;font-weight:700;margin:1px 0 3px}
+  border-radius:8px;padding:8px 12px;box-shadow:var(--shadow)}
+.pipe .st.ai{border-color:var(--accent-line);background:var(--accent-bg2)}
+.pipe .st .n{font-size:10px;color:var(--ink3);font-weight:600}
+.pipe .st .nm{font-size:12px;font-weight:600;margin:1px 0 3px}
 .pipe .st .ds{font-size:10px;color:var(--ink3);line-height:1.35}
 
 /* ── 3×3 그리드 */
 .combo{display:grid;grid-template-columns:auto repeat(3,1fr);gap:6px}
-.combo .hd{font-size:10.5px;color:var(--ink2);text-align:center;padding:4px 0;font-weight:600}
+.combo .hd{font-size:11px;color:var(--ink2);text-align:center;padding:4px 0;font-weight:600}
 .combo .rh{font-size:11px;color:var(--ink2);display:flex;align-items:center;
-  justify-content:flex-end;padding-right:9px;font-weight:600;white-space:nowrap}
-.cell{border:1px solid var(--line);border-radius:8px;padding:9px 7px;text-align:center;
+  justify-content:flex-end;padding-right:8px;font-weight:600;white-space:nowrap}
+.cell{border:1px solid var(--line);border-radius:8px;padding:12px 8px;text-align:center;
   cursor:pointer;transition:.12s;background:#fff}
-.cell:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(20,35,60,.09)}
-.cell.sel{outline:2px solid var(--accent2);outline-offset:1px}
-.cell .tm{font-size:17px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.cell:hover{transform:translateY(-1px);box-shadow:var(--shadow2)}
+.cell.sel{outline:2px solid var(--accent);outline-offset:1px}
+.cell .tm{font-size:16px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .cell .bd{font-size:10px;color:var(--ink3);margin-top:1px}
-.cell .tag{font-size:9.5px;font-weight:700;margin-top:5px;display:inline-block;
+.cell .tag{font-size:10px;font-weight:600;margin-top:5px;display:inline-block;
   padding:1px 6px;border-radius:4px}
-.cell.cur{background:#f5f8fc;border-color:#c8ddf2}
-.cell.cur .tag{background:#e5eef8;color:var(--accent)}
+.cell.cur{background:var(--accent-bg2);border-color:var(--accent-line)}
+.cell.cur .tag{background:var(--accent-bg);color:var(--accent)}
 .cell.ok .tag{background:var(--ok-bg);color:var(--ok)}
-.cell.warn{background:#fffdf7;border-color:#f0e3c0}
+.cell.warn{background:var(--warn-bg);border-color:var(--warn-line)}
 .cell.warn .tag{background:var(--warn-bg);color:var(--warn)}
-.cell.bad{background:#fdf6f5;border-color:#f3ccc7}
+.cell.bad{background:var(--bad-bg);border-color:#f3ccc7}
 .cell.bad .tm{color:var(--bad)}
 .cell.bad .tag{background:var(--bad-bg);color:var(--bad)}
 
 /* ── 변경안 패널 */
-.prop{border:1px solid var(--line);border-radius:9px;padding:11px 13px;background:#fbfcfe}
-.prop.on{border-color:#bcd8f2;background:linear-gradient(180deg,#f6fbff,#fff)}
-.prop .ttl{font-size:11px;color:var(--ink2);font-weight:700;margin-bottom:7px;
-  display:flex;gap:7px;align-items:center}
+.prop{border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--bg)}
+.prop.on{border-color:var(--accent-line);background:var(--accent-bg2)}
+.prop .ttl{font-size:11px;color:var(--ink2);font-weight:600;margin-bottom:7px;
+  display:flex;gap:8px;align-items:center}
 .row{display:flex;justify-content:space-between;align-items:baseline;
-  padding:4px 0;border-bottom:1px dashed var(--line2);font-size:11.5px}
+  padding:4px 0;border-bottom:1px dashed var(--line2);font-size:12px}
 .row:last-child{border-bottom:0}
 .row .lb{color:var(--ink2)}
-.row .vl{font-weight:700;font-variant-numeric:tabular-nums}
+.row .vl{font-weight:600;font-variant-numeric:tabular-nums}
 .row .vl.big{font-size:16px}
-.btns{display:flex;gap:7px;margin-top:11px}
-.btns button{flex:1;padding:8px 0;border-radius:7px;border:1px solid var(--line);
-  background:#fff;color:var(--ink);font-family:inherit;font-size:11.5px;font-weight:700;cursor:pointer}
+.btns{display:flex;gap:8px;margin-top:11px}
+.btns button{flex:1;padding:8px 0;border-radius:6px;border:1px solid var(--line);
+  background:#fff;color:var(--ink);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer}
 .btns button.pri{background:var(--accent);border-color:var(--accent);color:#fff}
 .btns button:hover{filter:brightness(.97)}
 
 /* ── 타임라인 바 */
-.tl{display:flex;gap:1px;height:34px;border-radius:5px;overflow:hidden;
+.tl{display:flex;gap:1px;height:34px;border-radius:4px;overflow:hidden;
   border:1px solid var(--line)}
 .tl div{flex:1;min-width:0}
-.legend{display:flex;gap:13px;flex-wrap:wrap;font-size:10.5px;color:var(--ink2);margin-top:8px}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:2.5px;
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--ink2);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;
   margin-right:4px;vertical-align:-1px}
 
 /* ── 계산 스텝 */
 .steps{display:flex;gap:8px;flex-wrap:wrap}
-.steps .sp{flex:1 1 175px;border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:#fbfcfe}
-.steps .sp .t{font-size:10.5px;color:var(--ink3);font-weight:700;margin-bottom:3px}
-.steps .sp .m{font-size:11.5px;line-height:1.5}
-.steps .sp .r{font-size:14.5px;font-weight:800;margin-top:4px;color:var(--accent);
+.steps .sp{flex:1 1 175px;border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--bg)}
+.steps .sp .t{font-size:11px;color:var(--ink3);font-weight:600;margin-bottom:3px}
+.steps .sp .m{font-size:12px;line-height:1.5}
+.steps .sp .r{font-size:14px;font-weight:600;margin-top:4px;color:var(--accent);
   font-variant-numeric:tabular-nums}
 
-.ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11.5px}
+.ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}
 .ctrl button{padding:6px 12px;border-radius:6px;border:1px solid var(--line);background:#fff;
-  font-family:inherit;font-size:11.5px;cursor:pointer;color:var(--ink)}
-.ctrl button.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+  font-family:inherit;font-size:12px;cursor:pointer;color:var(--ink)}
+.ctrl button.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
 .ctrl input[type=range]{flex:1;min-width:130px}
 .hide{display:none}
 .mono{font-variant-numeric:tabular-nums}
-.why{font-size:10.5px;color:var(--bad);line-height:1.45}
+.why{font-size:11px;color:var(--bad);line-height:1.45}
 .why.w{color:var(--warn)}
-footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
+footer{color:var(--ink3);font-size:11px;text-align:center;padding:20px 0 0}
 </style>
 </head>
 <body>
@@ -185,18 +225,18 @@ footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
 
   <!-- ══════════ 탭 1 · 데이터 진단 ══════════ -->
   <section id="tab-diag" class="tabpane">
-    <div class="grid g4" style="margin-bottom:13px" id="diag-kpi"></div>
+    <div class="grid g4" style="margin-bottom:16px" id="diag-kpi"></div>
     <div class="grid g2">
       <div class="card">
         <h3>일자별 데이터 상태 <span class="b rule">규칙·통계</span></h3>
         <div class="cap">정상 운전 구간만 분석에 씁니다. 정비·수동조작·센서 이상은 제외합니다.</div>
         <div class="tl" id="diag-timeline"></div>
         <div class="legend">
-          <span><i style="background:#4a9d6e"></i>정상</span>
-          <span><i style="background:#d8a13a"></i>고정값</span>
-          <span><i style="background:#c9564c"></i>정비·수동</span>
-          <span><i style="background:#9aa7b6"></i>결측</span>
-          <span><i style="background:#5b6879"></i>통신 두절</span>
+          <span><i style="background:#00CC89"></i>정상</span>
+          <span><i style="background:#FFAA00"></i>고정값</span>
+          <span><i style="background:#FF334B"></i>정비·수동</span>
+          <span><i style="background:#C2C4C8"></i>결측</span>
+          <span><i style="background:#70737C"></i>통신 두절</span>
         </div>
       </div>
       <div class="card">
@@ -205,7 +245,7 @@ footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
         <div class="chart short"><canvas id="c-missing"></canvas></div>
       </div>
     </div>
-    <div class="card" style="margin-top:13px">
+    <div class="card" style="margin-top:16px">
       <h3>발견된 결함 구간</h3>
       <div class="cap">각 구간을 왜 제외했는지 함께 기록합니다.</div>
       <div class="scroll tall-scroll"><table class="t" id="diag-blocks"></table></div>
@@ -214,8 +254,8 @@ footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
 
   <!-- ══════════ 탭 2 · 운전 분석 ══════════ -->
   <section id="tab-base" class="tabpane hide">
-    <div class="grid g4" style="margin-bottom:13px" id="base-kpi"></div>
-    <div class="card" style="margin-bottom:13px">
+    <div class="grid g4" style="margin-bottom:16px" id="base-kpi"></div>
+    <div class="card" style="margin-bottom:16px">
       <h3>24시간 서버 부하와 냉방 설정 <span class="b mute">현재 운전 기준</span></h3>
       <div class="cap">부하는 오르내리는데 설정선이 평평한 구간 — 조정 여지를 확인할 지점입니다.</div>
       <div class="chart tall"><canvas id="c-base24"></canvas></div>
@@ -236,7 +276,7 @@ footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
 
   <!-- ══════════ 탭 3 · 모델 성능 ══════════ -->
   <section id="tab-model" class="tabpane hide">
-    <div class="grid g4" style="margin-bottom:13px" id="model-kpi"></div>
+    <div class="grid g4" style="margin-bottom:16px" id="model-kpi"></div>
     <div class="grid g2">
       <div class="card">
         <h3>예측값 대 실제값 <span class="b ai">AI · 학습</span></h3>
@@ -249,7 +289,7 @@ footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
         <div class="chart"><canvas id="c-hist"></canvas></div>
       </div>
     </div>
-    <div class="grid g2" style="margin-top:13px">
+    <div class="grid g2" style="margin-top:16px">
       <div class="card">
         <h3>예측 지평별 정확도</h3>
         <div class="cap">멀리 볼수록 오차가 커집니다. 시뮬레이션은 이 범위 안에서만 판단합니다.</div>
@@ -261,7 +301,7 @@ footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
         <div class="scroll"><table class="t" id="model-bins"></table></div>
       </div>
     </div>
-    <div class="card" style="margin-top:13px">
+    <div class="card" style="margin-top:16px">
       <h3>오차범위 산출 근거</h3>
       <div class="cap">표본이 적은 조합은 오차범위를 넓혀 보수적으로 판정합니다.</div>
       <div class="scroll"><table class="t" id="model-sigma"></table></div>
@@ -270,14 +310,14 @@ footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
 
   <!-- ══════════ 탭 4 · 시뮬레이션 ══════════ -->
   <section id="tab-sim" class="tabpane hide">
-    <div class="grid g4" style="margin-bottom:13px" id="sim-state"></div>
+    <div class="grid g4" style="margin-bottom:16px" id="sim-state"></div>
     <div class="grid g2">
       <div class="card">
         <h3>설정온도 × 팬 속도 조합 9개 <span class="b rule">규칙·로직</span></h3>
         <div class="cap">모두 계산한 뒤 허용온도를 넘는 조합은 제외합니다. 셀을 누르면 오른쪽에 전개됩니다.</div>
         <div class="combo" id="sim-grid"></div>
         <div class="legend">
-          <span><i style="background:#e5eef8"></i>현재 운전</span>
+          <span><i style="background:var(--accent-bg)"></i>현재 운전</span>
           <span><i style="background:#e8f6ee"></i>후보</span>
           <span><i style="background:#fdf3e2"></i>추가 확인</span>
           <span><i style="background:#fdedeb"></i>제외</span>
@@ -289,12 +329,12 @@ footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
         <div class="chart tall"><canvas id="c-simtl"></canvas></div>
       </div>
     </div>
-    <div class="card" style="margin-top:13px">
+    <div class="card" style="margin-top:16px">
       <h3>후보 순위와 제외 사유</h3>
       <div class="cap">왜 빠졌는지 항상 설명할 수 있어야 합니다.</div>
       <div class="scroll"><table class="t" id="sim-table"></table></div>
     </div>
-    <div class="card" style="margin-top:13px">
+    <div class="card" style="margin-top:16px">
       <h3>과거 사례로 검산 <span class="b rule">규칙·로직</span></h3>
       <div class="cap">모델과 별개로, 과거 같은 부하 구간의 실제 기록으로 같은 값을 다시 계산합니다.</div>
       <div class="steps" id="sim-history"></div>
@@ -303,19 +343,19 @@ footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
 
   <!-- ══════════ 탭 5 · 운영 대시보드 ══════════ -->
   <section id="tab-dash" class="tabpane hide">
-    <div class="grid g4" style="margin-bottom:13px" id="dash-kpi"></div>
-    <div class="card" style="margin-bottom:13px">
+    <div class="grid g4" style="margin-bottom:16px" id="dash-kpi"></div>
+    <div class="card" style="margin-bottom:16px">
       <div class="ctrl">
-        <b style="font-size:11.5px">데모 재생</b>
+        <b style="font-size:12px">데모 재생</b>
         <button data-spd="0" class="on">정지</button>
         <button data-spd="60">60배속</button>
         <button data-spd="360">360배속</button>
         <button id="rst">처음으로</button>
         <input type="range" id="scrub" min="0" value="0">
-        <span class="mono" id="clock" style="font-weight:700;min-width:105px;text-align:right"></span>
+        <span class="mono" id="clock" style="font-weight:600;min-width:105px;text-align:right"></span>
       </div>
       <div class="ctrl" style="margin-top:8px">
-        <b style="font-size:11.5px">시나리오</b>
+        <b style="font-size:12px">시나리오</b>
         <span id="scen-btns" style="display:flex;gap:6px;flex-wrap:wrap"></span>
       </div>
     </div>
@@ -327,14 +367,14 @@ footer{color:var(--ink3);font-size:10.5px;text-align:center;padding:20px 0 0}
       </div>
       <div>
         <div class="prop on" id="dash-prop"></div>
-        <div class="card" style="margin-top:13px">
+        <div class="card" style="margin-top:16px">
           <h3>사전 검증 진행 상황 <span class="b mute">설정 미변경</span></h3>
           <div class="cap">실제 설정은 그대로 두고 예측만 실제값과 대조합니다.</div>
           <div id="dash-shadow"></div>
         </div>
       </div>
     </div>
-    <div class="card" style="margin-top:13px">
+    <div class="card" style="margin-top:16px">
       <h3>PUE · 냉각 에너지 추이</h3>
       <div class="cap" id="pue-cap"></div>
       <div class="chart"><canvas id="c-pue"></canvas></div>
@@ -362,7 +402,7 @@ const pct = v => v==null?'—':(v*100).toFixed(1)+'%';
 
 Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
 Chart.defaults.font.size = 10.5;
-Chart.defaults.color = '#5b6879';
+Chart.defaults.color = '#70737C';
 Chart.defaults.animation = false;      // 발표 중 즉시 표시 (그리는 도중이 보이지 않게)
 Chart.defaults.plugins.legend.labels.boxWidth = 10;
 Chart.defaults.plugins.legend.labels.boxHeight = 10;
@@ -434,10 +474,10 @@ function renderDiag(){
 
   const tl = $('#diag-timeline');
   dg.timeline.forEach(d=>{
-    let bg = '#4a9d6e';
-    if(d.outage>0.05) bg='#5b6879'; else if(d.maint>0.05) bg='#c9564c';
-    else if(d.stuck>0.05) bg='#d8a13a'; else if(d.missing>0.03) bg='#9aa7b6';
-    else if(d.usable<0.99) bg='#7fb894';
+    let bg = '#00CC89';
+    if(d.outage>0.05) bg='#70737C'; else if(d.maint>0.05) bg='#FF334B';
+    else if(d.stuck>0.05) bg='#FFAA00'; else if(d.missing>0.03) bg='#C2C4C8';
+    else if(d.usable<0.99) bg='#91E9CC';
     const x = el('div'); x.style.background=bg;
     x.title = `${d.date} · 사용가능 ${pct(d.usable)}`;
     tl.appendChild(x);
@@ -445,10 +485,10 @@ function renderDiag(){
 
   chart('c-missing', {type:'bar', data:{
     labels: dg.column_missing.map(c=>c.column.replace(/_/g,' ').replace(' kw','').replace(' c','').replace(' pct','')),
-    datasets:[{data:dg.column_missing.map(c=>c.missing_pct), backgroundColor:'#2f7fd1', borderRadius:3}]},
+    datasets:[{data:dg.column_missing.map(c=>c.missing_pct), backgroundColor:'#0099FF', borderRadius:3}]},
     options:{indexAxis:'y', plugins:{legend:{display:false},
       tooltip:{callbacks:{label:c=>c.parsed.x.toFixed(2)+'%'}}},
-      scales:{x:{title:{display:true,text:'결측률 (%)'},grid:{color:'#eef1f6'}},y:{grid:{display:false}}}}});
+      scales:{x:{title:{display:true,text:'결측률 (%)'},grid:{color:'#F4F4F5'}},y:{grid:{display:false}}}}});
 
   const t = $('#diag-blocks');
   t.innerHTML = '<thead><tr><th>유형</th><th>시작</th><th>종료</th><th class="num">지속(분)</th><th>조치</th></tr></thead>';
@@ -481,14 +521,14 @@ function renderBase(){
 
   const s = B.series_24h;
   chart('c-base24', {type:'line', data:{labels:s.map(r=>r.t), datasets:[
-    {type:'line',label:'서버 부하 (kW)',data:s.map(r=>r.load),borderColor:'#12467f',
-     backgroundColor:'rgba(18,70,127,.07)',fill:true,borderWidth:1.8,pointRadius:0,tension:.3,yAxisID:'y'},
-    {type:'line',label:'설정온도 (℃)',data:s.map(r=>r.sp),borderColor:'#c9564c',
+    {type:'line',label:'서버 부하 (kW)',data:s.map(r=>r.load),borderColor:'#008DCF',
+     backgroundColor:'rgba(0,141,207,.08)',fill:true,borderWidth:1.8,pointRadius:0,tension:.3,yAxisID:'y'},
+    {type:'line',label:'설정온도 (℃)',data:s.map(r=>r.sp),borderColor:'#FF334B',
      borderWidth:2,pointRadius:0,stepped:true,yAxisID:'y1'},
-    {type:'line',label:'구역 대표온도 (℃)',data:s.map(r=>r.temp),borderColor:'#3c7a5a',
+    {type:'line',label:'구역 대표온도 (℃)',data:s.map(r=>r.temp),borderColor:'#00A9A9',
      borderWidth:1.5,pointRadius:0,tension:.3,yAxisID:'y1',borderDash:[4,3]},
   ]}, options:{interaction:{mode:'index',intersect:false},
-    scales:{y:{position:'left',title:{display:true,text:'부하 (kW)'},grid:{color:'#eef1f6'}},
+    scales:{y:{position:'left',title:{display:true,text:'부하 (kW)'},grid:{color:'#F4F4F5'}},
       y1:{position:'right',title:{display:true,text:'온도 (℃)'},grid:{display:false},
           suggestedMin:20,suggestedMax:27},
       x:{ticks:{maxTicksLimit:13},grid:{display:false}}}}});
@@ -510,10 +550,10 @@ function renderBase(){
       `설정 1℃당 최종 <b>${n2(S.gain_per_setpoint_c)}℃</b> 상승, 63% 도달까지 <b>${n0(S.tau_min)}분</b>.`;
   const cv = S.curve||[], st = S.curve_step_min||5;
   chart('c-step', {type:'line', data:{labels:cv.map((_,i)=>i*st+'분'), datasets:[
-    {label:'설정 1℃당 온도 변화 (℃)',data:cv,borderColor:'#6b3fd4',
-     backgroundColor:'rgba(107,63,212,.08)',fill:true,borderWidth:2,pointRadius:0,tension:.25}]},
+    {label:'설정 1℃당 온도 변화 (℃)',data:cv,borderColor:'#A14FF9',
+     backgroundColor:'rgba(161,79,249,.10)',fill:true,borderWidth:2,pointRadius:0,tension:.25}]},
     options:{plugins:{legend:{display:false}},
-      scales:{y:{title:{display:true,text:'온도 변화 (℃)'},grid:{color:'#eef1f6'}},
+      scales:{y:{title:{display:true,text:'온도 변화 (℃)'},grid:{color:'#F4F4F5'}},
         x:{grid:{display:false},ticks:{maxTicksLimit:9}}}}});
 }
 
@@ -530,22 +570,22 @@ function renderModel(){
 
   chart('c-scatter', {type:'scatter', data:{datasets:[
     {label:'검증 표본',data:M.scatter.map(p=>({x:p.actual,y:p.pred})),
-     backgroundColor:'rgba(47,127,209,.28)',pointRadius:1.8},
+     backgroundColor:'rgba(0,141,207,.28)',pointRadius:1.8},
     {label:'완전 일치선',type:'line',data:[{x:21,y:21},{x:28,y:28}],
-     borderColor:'#c9564c',borderWidth:1.2,borderDash:[5,4],pointRadius:0}]},
-    options:{scales:{x:{title:{display:true,text:'실제 온도 (℃)'},grid:{color:'#eef1f6'}},
-      y:{title:{display:true,text:'예측 온도 (℃)'},grid:{color:'#eef1f6'}}}}});
+     borderColor:'#FF334B',borderWidth:1.2,borderDash:[5,4],pointRadius:0}]},
+    options:{scales:{x:{title:{display:true,text:'실제 온도 (℃)'},grid:{color:'#F4F4F5'}},
+      y:{title:{display:true,text:'예측 온도 (℃)'},grid:{color:'#F4F4F5'}}}}});
 
   const H = M.error_hist, ed = H.edges;
   chart('c-hist', {type:'bar', data:{
     labels: ed.slice(0,-1).map((e,i)=>((e+ed[i+1])/2).toFixed(1)),
     datasets:[{label:'건수',data:H.counts,
-      backgroundColor:ed.slice(0,-1).map(e=>Math.abs(e)<=1?'#2f7fd1':'#d99b93')}]},
+      backgroundColor:ed.slice(0,-1).map(e=>Math.abs(e)<=1?'#4A71FF':'#FFA7B2')}]},
     options:{plugins:{legend:{display:false},
       tooltip:{callbacks:{title:c=>'오차 '+c[0].label+'℃'}}},
       scales:{x:{title:{display:true,text:'예측 오차 (℃) — 파란 구간이 ±1℃ 이내'},
         grid:{display:false},ticks:{maxTicksLimit:11}},
-        y:{title:{display:true,text:'건수'},grid:{color:'#eef1f6'}}}}});
+        y:{title:{display:true,text:'건수'},grid:{color:'#F4F4F5'}}}}});
 
   let t = $('#model-horizon');
   t.innerHTML='<thead><tr><th>예측 지평</th><th class="num">MAE</th><th class="num">RMSE</th>'+
@@ -693,20 +733,20 @@ function renderTL(){
   const band = SEL.band_c, bandS = SEL.settle_band_c, last = SEL.timeline.length-1;
   const bandAt = i => band + (bandS-band)*(i/Math.max(last,1));
   chart('c-simtl',{type:'line', data:{labels:lb, datasets:[
-    {label:'예상 온도 (선택 조합)',data:SEL.timeline.map(p=>p.temp),borderColor:'#12467f',
-     borderWidth:2.4,pointRadius:3,pointBackgroundColor:'#12467f',tension:.25,order:1},
+    {label:'예상 온도 (선택 조합)',data:SEL.timeline.map(p=>p.temp),borderColor:'#4A71FF',
+     borderWidth:2.4,pointRadius:3,pointBackgroundColor:'#4A71FF',tension:.25,order:1},
     {label:'오차범위 상한 (95%)',data:SEL.timeline.map((p,i)=>+(p.temp+bandAt(i)).toFixed(3)),
-     borderColor:'rgba(18,70,127,.22)',backgroundColor:'rgba(18,70,127,.10)',
+     borderColor:'rgba(74,113,255,.24)',backgroundColor:'rgba(74,113,255,.10)',
      borderWidth:1,pointRadius:0,fill:'+1',tension:.25,order:3},
     {label:'오차범위 하한',data:SEL.timeline.map((p,i)=>+(p.temp-bandAt(i)).toFixed(3)),
-     borderColor:'rgba(18,70,127,.22)',borderWidth:1,pointRadius:0,tension:.25,order:3},
+     borderColor:'rgba(74,113,255,.24)',borderWidth:1,pointRadius:0,tension:.25,order:3},
     ...(cur&&cur!==SEL?[{label:'현재 설정 유지',data:cur.timeline.map(p=>p.temp),
-     borderColor:'#93a0b1',borderWidth:1.6,borderDash:[5,4],pointRadius:0,tension:.25,order:2}]:[]),
-    {label:`허용온도 ${n1(LIMIT)}℃`,data:SEL.timeline.map(()=>LIMIT),borderColor:'#c9564c',
+     borderColor:'#C2C4C8',borderWidth:1.6,borderDash:[5,4],pointRadius:0,tension:.25,order:2}]:[]),
+    {label:`허용온도 ${n1(LIMIT)}℃`,data:SEL.timeline.map(()=>LIMIT),borderColor:'#FF334B',
      borderWidth:1.6,borderDash:[6,4],pointRadius:0,order:0},
   ]},options:{interaction:{mode:'index',intersect:false},
     plugins:{legend:{labels:{filter:it=>!it.text.includes('하한')}}},
-    scales:{y:{title:{display:true,text:'구역 대표온도 (℃)'},grid:{color:'#eef1f6'},
+    scales:{y:{title:{display:true,text:'구역 대표온도 (℃)'},grid:{color:'#F4F4F5'},
       suggestedMin:23,suggestedMax:Math.max(LIMIT+.4,26.4)},x:{grid:{display:false}}}}});
 }
 
@@ -727,11 +767,11 @@ function drawProp(){
     `<div class="row"><span class="lb">예상 구역 온도 (30분 후)</span><span class="vl big">${n1(p.expected_temp_c)} ± ${n1(p.band_c)}℃</span></div>`+
     `<div class="row"><span class="lb">최악의 경우</span><span class="vl">${n2(p.worst_temp_c)}℃ <span class="b ok">허용 ${n1(LIMIT)}℃ 이내</span></span></div>`+
     `<div class="row"><span class="lb">예상 냉각전력</span><span class="vl" style="color:var(--ok)">감소 방향</span></div>`+
-    `<div class="row"><span class="lb" style="font-size:10.5px;color:var(--ink3)">계산 근거</span>`+
-      `<span class="vl" style="font-weight:600;font-size:10.5px;color:var(--ink3)">`+
+    `<div class="row"><span class="lb" style="font-size:11px;color:var(--ink3)">계산 근거</span>`+
+      `<span class="vl" style="font-weight:600;font-size:11px;color:var(--ink3)">`+
       `${n1(st.cooling_power_kw)} → ${n1(p.expected_cooling_kw)} kW (${dk>0?'+':''}${n1(dk)})</span></div>`+
     `<div class="row"><span class="lb">운영 PUE (현재)</span><span class="vl">${pueNow.pue.toFixed(3)}`+
-      `<span style="font-weight:500;color:var(--ink3);font-size:10.5px"> · 냉각만 ${pueNow.partial_pue.toFixed(3)}</span></span></div>`+
+      `<span style="font-weight:500;color:var(--ink3);font-size:11px"> · 냉각만 ${pueNow.partial_pue.toFixed(3)}</span></span></div>`+
     `<div class="btns"><button class="pri">적용 검토</button><button>추가 확인</button><button>보류</button></div>`+
     `<div style="font-size:10px;color:var(--ink3);margin-top:7px">자동 제어는 이번 PoC 범위가 아닙니다. 운영자 승인까지만 제공합니다.</div>`;
   box.querySelectorAll('.btns button').forEach(b=>b.onclick=()=>{
@@ -757,24 +797,24 @@ function drawDash(){
   $('#scrub').max = N-1; $('#scrub').value = p;
 
   chart('c-dash',{type:'line', data:{labels:cut1.map(r=>r.t.slice(6)), datasets:[
-    {label:'구역① 대표온도',data:cut1.map(r=>r.temp),borderColor:'#12467f',
+    {label:'구역① 대표온도',data:cut1.map(r=>r.temp),borderColor:'#008DCF',
      borderWidth:1.9,pointRadius:0,tension:.3},
-    {label:'구역② 대표온도',data:cut2.map(r=>r.temp),borderColor:'#2f7fd1',
+    {label:'구역② 대표온도',data:cut2.map(r=>r.temp),borderColor:'#00A9A9',
      borderWidth:1.4,pointRadius:0,tension:.3,borderDash:[4,3]},
-    {label:`허용온도 ${n1(LIMIT)}℃`,data:cut1.map(()=>LIMIT),borderColor:'#c9564c',
+    {label:`허용온도 ${n1(LIMIT)}℃`,data:cut1.map(()=>LIMIT),borderColor:'#FF334B',
      borderWidth:1.6,borderDash:[6,4],pointRadius:0},
   ]},options:{interaction:{mode:'index',intersect:false},
-    scales:{y:{title:{display:true,text:'온도 (℃)'},grid:{color:'#eef1f6'},
+    scales:{y:{title:{display:true,text:'온도 (℃)'},grid:{color:'#F4F4F5'},
       suggestedMin:22,suggestedMax:Math.max(LIMIT+.5,26.5)},
       x:{grid:{display:false},ticks:{maxTicksLimit:12}}}}});
 
   chart('c-pue',{type:'line', data:{labels:cut1.map(r=>r.t.slice(6)), datasets:[
-    {type:'line',label:'운영 PUE',data:cut1.map(r=>r.pue),borderColor:'#6b3fd4',
+    {type:'line',label:'운영 PUE',data:cut1.map(r=>r.pue),borderColor:'#A14FF9',
      borderWidth:2,pointRadius:0,tension:.3,yAxisID:'y'},
-    {type:'line',label:'냉각전력 (kW)',data:cut1.map(r=>r.cool),borderColor:'#3c7a5a',
-     backgroundColor:'rgba(60,122,90,.07)',fill:true,borderWidth:1.4,pointRadius:0,tension:.3,yAxisID:'y1'},
+    {type:'line',label:'냉각전력 (kW)',data:cut1.map(r=>r.cool),borderColor:'#00A9A9',
+     backgroundColor:'rgba(0,214,143,.10)',fill:true,borderWidth:1.4,pointRadius:0,tension:.3,yAxisID:'y1'},
   ]},options:{interaction:{mode:'index',intersect:false},
-    scales:{y:{position:'left',title:{display:true,text:'PUE'},grid:{color:'#eef1f6'}},
+    scales:{y:{position:'left',title:{display:true,text:'PUE'},grid:{color:'#F4F4F5'}},
       y1:{position:'right',title:{display:true,text:'냉각전력 (kW)'},grid:{display:false}},
       x:{grid:{display:false},ticks:{maxTicksLimit:12}}}}});
 
