@@ -1,0 +1,6 @@
+# 생성물 — run.bat 이 다시 만듭니다 (약 200MB)
+data/
+models/
+reports/
+__pycache__/
+*.pyc
